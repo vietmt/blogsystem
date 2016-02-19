@@ -1,0 +1,33 @@
+<% provide(:title, @entry.title) %>
+<section class="entry_form">
+  <h1 class="title"><%= @entry.title %></h1>
+  <div class="user">
+    <%= link_to gravatar_for(@entry.user, size: 50), @entry.user %>
+    <%= link_to @entry.user.name, @entry.user %>
+  </div>
+  <div class="content"><%= @entry.content %></div>
+  <div class="content"><%= image_tag @entry.picture.url if @entry.picture? %></div>
+  <div class="timestamp">
+    Posted <%= time_ago_in_words(@entry.created_at) %> ago.
+  </div>
+</section>
+<% if logged_in? %>
+  <section>
+    <%= form_for(@comment) do |f| %>
+    <%= render 'shared/error_messages', object: f.object %>
+    <div class="field">
+      <%= f.text_area :content %>
+    </div>
+    <div><%= f.hidden_field :entry_id, value: @entry.id %></div>
+    <div><%= f.hidden_field :user_id, value: current_user.id %></div>
+    <%= f.submit "Post", class: "btn btn-primary" %>
+  <% end %>
+  </section>
+<% end %>
+<% if @entry.comments.any? %>
+  <h3>Comment (<%= @entry.comments.count %>)</h3>
+  <ol class="comments">
+    <%= render @comments %>
+  </ol>
+  <%= will_paginate @comments %>
+<% end %>

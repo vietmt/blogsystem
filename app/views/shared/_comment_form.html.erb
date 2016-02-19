@@ -1,0 +1,10 @@
+<%= form_for(@entry, html: { multipart: true }) do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
+  <div class="field">
+    <%= f.text_area :content%>
+    <div><%= hidden_field_tag :user_id, current_user.id %></div>
+  </div>
+  <%= f.submit "Comm", class: "btn btn-primary" %>
+<% end %>
+ 
+
